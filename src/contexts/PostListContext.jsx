@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useReducer } from 'react'
 import { createContext } from 'react'
 
@@ -28,18 +27,9 @@ const PostListDefault = [
 		userId: 91,
 	},
 ]
-export const AppContext = createContext({})
+export const PostListContext = createContext({})
 
 export default function PostListContextProvider({ children }) {
-	const [currentPage, setCurrentPage] = useState('HomePage')
-	const Page = {
-		currentPage,
-		/** @param {"HomePage" | "CreatePage"} value  */
-		changePage: function (value) {
-			setCurrentPage(value)
-		},
-	}
-
 	function PostListReducer(currentPostList, action) {
 		console.log(action)
 		return currentPostList //TODO
@@ -54,8 +44,8 @@ export default function PostListContextProvider({ children }) {
 		deletePost: () => null,
 	}
 	return (
-		<AppContext.Provider value={{ PostList, Page }}>
+		<PostListContext.Provider value={{ PostList }}>
 			{children}
-		</AppContext.Provider>
+		</PostListContext.Provider>
 	)
 }

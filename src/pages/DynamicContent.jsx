@@ -1,14 +1,17 @@
 import { useContext } from 'react'
 import CreatePostForm from '../components/CreatePostForm'
 import PostsList from '../components/PostsList'
-import { AppContext } from '../contexts/AppContext'
+import { PageContext } from '../contexts/PageContext'
+import PostListContextProvider from '../contexts/PostListContext'
 
 export default function Pages() {
-	const { Page } = useContext(AppContext)
+	const { currentPage } = useContext(PageContext)
 	return (
 		<section className='flex w-full flex-1 flex-col items-center justify-center gap-6'>
-			{Page.currentPage === 'HomePage' ?
-				<PostsList />
+			{currentPage === 'HomePage' ?
+				<PostListContextProvider>
+					<PostsList />
+				</PostListContextProvider>
 			:	<CreatePostForm />}
 		</section>
 	)

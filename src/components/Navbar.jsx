@@ -1,8 +1,8 @@
 import { useContext } from 'react'
-import { AppContext } from '../contexts/AppContext'
+import { PageContext } from '../contexts/PageContext'
 
 export default function Navbar() {
-	const { Page } = useContext(AppContext)
+	const { currentPage, changePage } = useContext(PageContext)
 	return (
 		<div className='navbar bg-base-100 border-base-200 sticky top-0 z-10 mb-6 flex-none border shadow-lg'>
 			<div className='navbar-start'>
@@ -30,17 +30,17 @@ export default function Navbar() {
 					<ul
 						tabIndex={-1}
 						className='menu menu-xl dropdown-content bg-base-200 rounded-box z-1 mt-3 w-56 p-2 shadow'>
-						<li onClick={() => Page.changePage('HomePage')}>
+						<li onClick={() => changePage('HomePage')}>
 							<button
 								href='#'
-								className={`${Page.currentPage === 'HomePage' && 'menu-active'}`}>
+								className={`${currentPage === 'HomePage' && 'menu-active'}`}>
 								Home
 							</button>
 						</li>
-						<li onClick={() => Page.changePage('CreatePage')}>
+						<li onClick={() => changePage('CreatePage')}>
 							<button
 								href='#'
-								className={`${Page.currentPage === 'CreatePage' && 'menu-active'}`}>
+								className={`${currentPage === 'CreatePage' && 'menu-active'}`}>
 								Create Post
 							</button>
 						</li>
@@ -50,15 +50,15 @@ export default function Navbar() {
 			</div>
 			<div className='navbar-center hidden md:flex'>
 				<ul className='menu menu-horizontal menu-lg px-1'>
-					<li onClick={() => Page.changePage('HomePage')}>
+					<li onClick={() => changePage('HomePage')}>
 						<button
-							className={`${Page.currentPage === 'HomePage' && 'menu-active'}`}>
+							className={`${currentPage === 'HomePage' && 'menu-active'}`}>
 							Home
 						</button>
 					</li>
-					<li onClick={() => Page.changePage('CreatePage')}>
+					<li onClick={() => changePage('CreatePage')}>
 						<button
-							className={`${Page.currentPage === 'CreatePage' && 'menu-active'}`}>
+							className={`${currentPage === 'CreatePage' && 'menu-active'}`}>
 							Create Post
 						</button>
 					</li>
