@@ -1,6 +1,21 @@
 import { useReducer } from 'react'
 import { createContext } from 'react'
 
+/** @typedef Reaction
+ * @property {number} likes
+ * @property {number} dislikes
+ */
+
+/** @typedef Post
+ * @property {string} id
+ * @property {string} title
+ * @property {string} body
+ * @property {Array<string>} tags
+ * @property {Reaction} reactions
+ * @property {number} userId
+ */
+
+/** @type {Array<Post>} */
 const PostListDefault = [
 	{
 		id: 1,
@@ -11,7 +26,6 @@ const PostListDefault = [
 			likes: 192,
 			dislikes: 25,
 		},
-		views: 305,
 		userId: 121,
 	},
 	{
@@ -23,16 +37,43 @@ const PostListDefault = [
 			likes: 859,
 			dislikes: 32,
 		},
-		views: 4884,
 		userId: 91,
 	},
 ]
+// eslint-disable-next-line react-refresh/only-export-components
 export const PostListContext = createContext({})
 
 export default function PostListContextProvider({ children }) {
-	function PostListReducer(currentPostList, action) {
-		console.log(action)
-		return currentPostList //TODO
+	function PostListReducer(postList, action) {
+		let newPostList = []
+		switch (action.type) {
+			case 'Add':
+				newPostList = [action.payload.post, ...postList]
+				break
+			case 'Delete':
+				newPostList = postList.filter(
+					item => item.id !== action.payload.id
+				)
+				break
+			case 'Like':
+				{
+					postList.map(item => {
+						item.id === action.payload.id && item.reactions.likes++
+					})
+					newPostList = [...postList]
+				}
+				break
+			case 'Dislike':
+				{
+					postList.map(item => {
+						item.id === action.payload.id &&
+							item.reactions.dislikes++
+					})
+					newPostList = [...postList]
+				}
+				break
+		}
+		return newPostList
 	}
 	const [postList, dispatchPostList] = useReducer(
 		PostListReducer,
@@ -40,11 +81,43 @@ export default function PostListContextProvider({ children }) {
 	)
 	const PostList = {
 		postList,
-		addPost: () => null,
-		deletePost: () => null,
+
+		/** @param {Post} post */
+		addPost: post => {
+			dispatchPostList({
+				type: 'Add',
+				payload: { post },
+			})
+		},
+		/** @param {number} id*/
+		deletePost: id => {
+			dispatchPostList({
+				type: 'Delete',
+				payload: { id },
+			})
+		},
+		likePost: id => {
+			dispatchPostList({
+				type: 'Like',
+				payload: { id },
+			})
+		},
+		dislikePost: id => {
+			dispatchPostList({
+				type: 'Dislike',
+				payload: { id },
+			})
+		},
 	}
 	return (
-		<PostListContext.Provider value={{ PostList }}>
+		<PostListContext.Provider
+			value={{
+				PostList: PostList.postList,
+				addPost: PostList.addPost,
+				deletePost: PostList.deletePost,
+				likePost: PostList.likePost,
+				dislikePost: PostList.dislikePost,
+			}}>
 			{children}
 		</PostListContext.Provider>
 	)

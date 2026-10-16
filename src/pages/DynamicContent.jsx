@@ -8,11 +8,11 @@ export default function Pages() {
 	const { currentPage } = useContext(PageContext)
 	return (
 		<section className='flex w-full flex-1 flex-col items-center justify-center gap-6'>
-			{currentPage === 'HomePage' ?
-				<PostListContextProvider>
+			<PostListContextProvider>
+				{currentPage === 'HomePage' ?
 					<PostsList />
-				</PostListContextProvider>
-			:	<CreatePostForm />}
+				:	<CreatePostForm />}
+			</PostListContextProvider>
 		</section>
 	)
 }
