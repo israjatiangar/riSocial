@@ -11,33 +11,29 @@ export default function PostCard({ id, title, post, tags, likes, dislikes }) {
 				<header>
 					<h2 className='card-title'>{title}</h2>
 				</header>
-				<p className='text-base-content opacity-75'>{post}</p>
 				<div className='flex gap-1'>
 					{tags &&
 						tags.map(tag => (
 							<span
-								className='badge badge-soft badge-primary'
+								className='badge badge-sm badge-soft badge-primary'
 								key={id + tag}>
 								#{tag}
 							</span>
 						))}
 				</div>
+				<p className='text-base-content opacity-75'>{post}</p>
 				<hr className='divider divider-default border-0' />
 				<footer className='card-footer'>
 					<div className='card-actions'>
 						<button
 							className='btn btn-primary'
-							onClick={() => {
-								likePost(id)
-							}}>
+							onClick={() => likePost(id)}>
 							<HeartIcon size={iconSize} weight='duotone' />
 							{likes}{' '}
 						</button>
 						<button
 							className='btn btn-default btn-soft'
-							onClick={() => {
-								dislikePost(id)
-							}}>
+							onClick={() => dislikePost(id)}>
 							<HeartBreakIcon size={iconSize} weight='duotone' />
 							{dislikes}
 						</button>

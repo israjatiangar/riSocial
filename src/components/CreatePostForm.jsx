@@ -64,7 +64,7 @@ export default function CreatePostForm() {
 				<input
 					id='Post_Tags'
 					type='text'
-					placeholder='Post Title'
+					placeholder='Tags, Separated, By, Comma'
 					className='input w-full'
 					ref={tagsRef}
 				/>
