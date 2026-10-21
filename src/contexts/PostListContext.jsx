@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useState } from 'react'
 import { useReducer } from 'react'
 import { createContext } from 'react'
 
@@ -17,38 +19,13 @@ import { createContext } from 'react'
  */
 // #endregion
 
-// #region Default Posts
-/** @type {Array<Post>} */
-const PostListDefault = [
-	{
-		id: '1',
-		title: 'His mother had always taught him',
-		body: "His mother had always taught him not to ever think of himself as better than others. He'd tried to live by this motto. He never looked down on those who were less fortunate or who had less money than him. But the stupidity of the group of people he was talking to made him change his mind.",
-		tags: ['history', 'american', 'crime'],
-		reactions: {
-			likes: 192,
-			dislikes: 25,
-		},
-		userId: 121,
-	},
-	{
-		id: '2',
-		title: 'He was an expert but not in a discipline',
-		body: 'He was an expert but not in a discipline that anyone could fully appreciate. He knew how to hold the cone just right so that the soft server ice-cream fell into it at the precise angle to form a perfect cone each and every time. It had taken years to perfect and he could now do it without even putting any thought behind it.',
-		tags: ['french', 'fiction', 'english'],
-		reactions: {
-			likes: 859,
-			dislikes: 32,
-		},
-		userId: 91,
-	},
-]
-// #endregion
-
 // eslint-disable-next-line react-refresh/only-export-components
 export const PostListContext = createContext({})
 
 export default function PostListContextProvider({ children }) {
+	const [fetchingPosts, setFetchingPosts] = useState(true)
+	const [postList, dispatchPostList] = useReducer(PostListReducer, [])
+
 	function PostListReducer(postList, action) {
 		let newPostList = []
 		switch (action.type) {
@@ -86,15 +63,15 @@ export default function PostListContextProvider({ children }) {
 						:	item
 				})
 				break
+			case 'GetPosts':
+				newPostList = [...action.payload.posts]
+				break
 		}
 		return newPostList
 	}
-	const [postList, dispatchPostList] = useReducer(
-		PostListReducer,
-		PostListDefault
-	)
 	const PostList = {
 		postList,
+		fetchingPosts: fetchingPosts,
 
 		/** @param {Post} post */
 		addPost: post => {
@@ -122,11 +99,26 @@ export default function PostListContextProvider({ children }) {
 				payload: { id },
 			})
 		},
+		getPosts: posts => {
+			dispatchPostList({
+				type: 'GetPosts',
+				payload: { posts },
+			})
+		},
 	}
+	useEffect(() => {
+		fetch('https://dummyjson.com/posts')
+			.then(res => res.json())
+			.then(data => PostList.getPosts(data.posts))
+			.finally(() => setFetchingPosts(false))
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
 	return (
 		<PostListContext.Provider
 			value={{
 				PostList: PostList.postList,
+				fetchingPosts: PostList.fetchingPosts,
 				addPost: PostList.addPost,
 				deletePost: PostList.deletePost,
 				likePost: PostList.likePost,

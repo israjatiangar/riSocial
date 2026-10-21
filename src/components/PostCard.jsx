@@ -6,7 +6,7 @@ export default function PostCard({ id, title, post, tags, likes, dislikes }) {
 	const { deletePost, likePost, dislikePost } = useContext(PostListContext)
 	const iconSize = 16
 	return (
-		<article className='card bg-base-200 card-md rounded-field relative w-full shadow-md'>
+		<article className='card bg-base-200 card-md rounded-field relative min-h-60 shadow-md'>
 			<div className='card-body'>
 				<header>
 					<h2 className='card-title'>{title}</h2>
