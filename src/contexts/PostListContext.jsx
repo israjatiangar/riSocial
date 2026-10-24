@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useState } from 'react'
 import { useReducer } from 'react'
 import { createContext } from 'react'
@@ -106,14 +105,12 @@ export default function PostListContextProvider({ children }) {
 			})
 		},
 	}
-	useEffect(() => {
+	if (fetchingPosts) {
 		fetch('https://dummyjson.com/posts')
 			.then(res => res.json())
 			.then(data => PostList.getPosts(data.posts))
 			.finally(() => setFetchingPosts(false))
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
-
+	}
 	return (
 		<PostListContext.Provider
 			value={{
