@@ -1,10 +1,8 @@
-import { useContext } from 'react'
-import { PageContext } from '../contexts/PageContext'
+import { Link } from 'react-router-dom'
 
 export default function Navbar() {
-	const { currentPage, changePage } = useContext(PageContext)
 	return (
-		<div className='navbar bg-base-100 border-base-200 sticky top-0 z-10 mb-6 flex-none border shadow-lg'>
+		<nav className='navbar bg-base-100 border-base-200 sticky top-0 z-10 mb-6 flex-none border shadow-lg'>
 			<div className='navbar-start'>
 				<div className='dropdown'>
 					<div
@@ -30,19 +28,11 @@ export default function Navbar() {
 					<ul
 						tabIndex={-1}
 						className='menu menu-xl dropdown-content bg-base-200 rounded-box z-1 mt-3 w-56 p-2 shadow'>
-						<li onClick={() => changePage('HomePage')}>
-							<button
-								href='#'
-								className={`${currentPage === 'HomePage' && 'menu-active'}`}>
-								Home
-							</button>
+						<li>
+							<Link to='/home'>Home</Link>
 						</li>
-						<li onClick={() => changePage('CreatePage')}>
-							<button
-								href='#'
-								className={`${currentPage === 'CreatePage' && 'menu-active'}`}>
-								Create Post
-							</button>
+						<li>
+							<Link to='/create_post'>Create Post</Link>
 						</li>
 					</ul>
 				</div>
@@ -50,17 +40,11 @@ export default function Navbar() {
 			</div>
 			<div className='navbar-center hidden md:flex'>
 				<ul className='menu menu-horizontal menu-lg px-1'>
-					<li onClick={() => changePage('HomePage')}>
-						<button
-							className={`${currentPage === 'HomePage' && 'menu-active'}`}>
-							Home
-						</button>
+					<li>
+						<Link to='/home'>Home</Link>
 					</li>
-					<li onClick={() => changePage('CreatePage')}>
-						<button
-							className={`${currentPage === 'CreatePage' && 'menu-active'}`}>
-							Create Post
-						</button>
+					<li>
+						<Link to='/create_post'>Create Post</Link>
 					</li>
 				</ul>
 			</div>
@@ -95,6 +79,6 @@ export default function Navbar() {
 					</ul>
 				</div>
 			</div>
-		</div>
+		</nav>
 	)
 }

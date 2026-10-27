@@ -16,12 +16,12 @@ export default function LoadingCards() {
 				<hr className='divider divider-default my-4 border-0' />
 				<footer className='card-footer'>
 					<div className='card-actions flex gap-2'>
-						<div className='skeleton h-10 w-20'></div>
-						<div className='skeleton h-10 w-20'></div>
+						<div className='skeleton rounded-field h-10 w-20'></div>
+						<div className='skeleton rounded-field h-10 w-20'></div>
 					</div>
 				</footer>
 			</div>
-			<div className='skeleton absolute -top-2 -right-2 h-10 w-10'></div>
+			<div className='skeleton rounded-field absolute -top-2 -right-2 h-10 w-10'></div>
 		</article>
 	)
 }

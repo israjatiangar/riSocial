@@ -1,28 +1,13 @@
-import { useState } from 'react'
-import { useReducer } from 'react'
-import { createContext } from 'react'
-
-// #region Definitions
-/** @typedef Reaction
- * @property {number} likes
- * @property {number} dislikes
- */
-
-/** @typedef Post
- * @property {string} id
- * @property {string} title
- * @property {string} body
- * @property {Array<string>} tags
- * @property {Reaction} reactions
- * @property {number} userId
- */
-// #endregion
+import { useEffect } from 'react'
+import { useState, useReducer, createContext } from 'react'
+/** @import { Post } from "../types/PostTypes.d.mjs" */
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const PostListContext = createContext({})
 
 export default function PostListContextProvider({ children }) {
 	const [fetchingPosts, setFetchingPosts] = useState(true)
+	/** @type {[Array<Post>, function]} */
 	const [postList, dispatchPostList] = useReducer(PostListReducer, [])
 
 	function PostListReducer(postList, action) {
@@ -105,12 +90,22 @@ export default function PostListContextProvider({ children }) {
 			})
 		},
 	}
-	if (fetchingPosts) {
-		fetch('https://dummyjson.com/posts')
+	useEffect(() => {
+		const controller = new AbortController()
+		const signal = controller.signal
+		fetch('https://dummyjson.com/posts', { signal: signal })
 			.then(res => res.json())
-			.then(data => PostList.getPosts(data.posts))
-			.finally(() => setFetchingPosts(false))
-	}
+			.then(data => PostList.getPosts(data))
+			.catch(err => {
+				if (err.name !== 'AbortError') console.error(err)
+			})
+			.finally(() => {
+				if (!signal.aborted) setFetchingPosts(false)
+			})
+		return () => {
+			controller.abort()
+		}
+	}, [])
 	return (
 		<PostListContext.Provider
 			value={{
