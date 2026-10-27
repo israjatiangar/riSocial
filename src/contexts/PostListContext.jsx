@@ -95,7 +95,7 @@ export default function PostListContextProvider({ children }) {
 		const signal = controller.signal
 		fetch('https://dummyjson.com/posts', { signal: signal })
 			.then(res => res.json())
-			.then(data => PostList.getPosts(data))
+			.then(data => PostList.getPosts(data.posts))
 			.catch(err => {
 				if (err.name !== 'AbortError') console.error(err)
 			})
